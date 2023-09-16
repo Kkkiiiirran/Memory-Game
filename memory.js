@@ -16,6 +16,9 @@ var board = [];
 var rows = 4;
 var cols = 5;
 
+var firstSelection;
+var secondSelection;
+
 window.onload = function(){
     shuffleCards(); //take the cardlist and add it to our card set but twice since we need pairs
     startGame(); //populate the cards in html
@@ -47,11 +50,60 @@ function startGame(){
             card.id = r.toString() + "-" + c.toString();  
             card.src = "Images/" + cardImg + ".jpg";  
             card.classList.add("card");
+            card.addEventListener("click", clickedCard);
             document.getElementById("board").appendChild(card);
         }
         board.push(row);
     }
 
     console.log(board);
+    setTimeout(flipCards, 1000)
+
 }
 
+function flipCards() {
+    for(let r = 0; r<rows; r++) {
+        for(let c = 0; c<cols; c++) {
+            let card = document.getElementById(r.toString() + "-" + c.toString());
+            card.src = "Images/back.jpg";
+        }
+    }
+}
+
+function clickedCard() {
+    if (this.src.includes("back")) {
+        if (!firstSelection) {
+            firstSelection = this;
+            
+            let sourceCoords = firstSelection.id.split("-");
+            let r = parseInt(sourceCoords[0]);
+            let c = parseInt(sourceCoords[1]); //parseInt converts a string to an integer
+
+            firstSelection.src = "Images/" + board[r][c] + ".jpg";
+        }
+
+        else if (!secondSelection && this != firstSelection) {
+            secondSelection = this;
+            
+            let sourceCoords = secondSelection.id.split("-");
+            let r = parseInt(sourceCoords[0]);
+            let c = parseInt(sourceCoords[1]);
+
+            secondSelection.src = "Images/" + board[r][c] + ".jpg";
+
+            setTimeout(checkMatch, 1000);
+        }
+
+    }
+}
+
+function checkMatch() {
+    if (firstSelection.src != secondSelection.src) {
+        firstSelection.src = "Images/back.jpg";
+        secondSelection.src = "Images/back.jpg";
+        
+    }
+
+    firstSelection = null;
+    secondSelection = null;
+}
