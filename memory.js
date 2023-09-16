@@ -1,3 +1,5 @@
+//defined a cardlist array that contains the names of the images
+
 var cardlist =[
     "darkness",
     "double",
@@ -11,17 +13,23 @@ var cardlist =[
     "water"
 ]
 
-var cardset;
-var board = [];
+var cardset; //this is the array that will contain the cardlist twice
+var board = []; //this is the array that will contain the cards in the board
 var rows = 4;
 var cols = 5;
 
 var firstSelection;
 var secondSelection;
 
+var timer = 10;
+var score = 0
+
+var audio = new Audio();
+
 window.onload = function(){
     shuffleCards(); //take the cardlist and add it to our card set but twice since we need pairs
     startGame(); //populate the cards in html
+    timerCountdown();
 }
 
 function shuffleCards() {
@@ -72,6 +80,8 @@ function flipCards() {
 
 function clickedCard() {
     if (this.src.includes("back")) {
+        audio.src = "flip.mp3";
+        audio.play();
         if (!firstSelection) {
             firstSelection = this;
             
@@ -104,6 +114,35 @@ function checkMatch() {
         
     }
 
+    else {
+        //replace match audio in place of flip audio
+        audio.src = "match.mp3";
+        audio.play();
+        
+        score+= 10;
+        document.getElementById("score").innerHTML = score;
+    }
     firstSelection = null;
     secondSelection = null;
 }
+
+function timerCountdown() {
+    setInterval (function() {
+        if (timer > 0) {
+            timer--;
+            document.getElementById("timer").innerHTML = timer;
+        }
+        else if (timer == 0) {
+            clearInterval(timer);
+            document.querySelector("#board").innerHTML = "<h1>Game Over</h1>";
+        }
+        }, 1000);
+    
+}
+
+
+
+    
+
+
+
