@@ -21,7 +21,7 @@ var cols = 5;
 var firstSelection;
 var secondSelection;
 
-var timer = 10;
+var timer = 30;
 var score = 0
 
 var audio = new Audio();
