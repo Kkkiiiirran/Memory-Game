@@ -21,8 +21,8 @@ var cols = 5;
 var firstSelection;
 var secondSelection;
 
-var timer = 30;
-var score = 0
+var timer = 180;
+var score = 0;
 
 var audio = new Audio();
 
@@ -30,6 +30,7 @@ window.onload = function(){
     shuffleCards(); //take the cardlist and add it to our card set but twice since we need pairs
     startGame(); //populate the cards in html
     timerCountdown();
+    
 }
 
 function shuffleCards() {
@@ -108,6 +109,7 @@ function clickedCard() {
 }
 
 function checkMatch() {
+
     if (firstSelection.src != secondSelection.src) {
         firstSelection.src = "Images/back.jpg";
         secondSelection.src = "Images/back.jpg";
@@ -122,6 +124,8 @@ function checkMatch() {
         score+= 10;
         document.getElementById("score").innerHTML = score;
     }
+
+    checkVictory();
     firstSelection = null;
     secondSelection = null;
 }
@@ -134,6 +138,8 @@ function timerCountdown() {
         }
         else if (timer == 0) {
             clearInterval(timer);
+            var gameOver = new Audio("gameover.mp3");
+            gameOver.play();
             document.querySelector("#board").innerHTML = "<h1>Game Over</h1>";
         }
         }, 1000);
@@ -142,7 +148,17 @@ function timerCountdown() {
 
 
 
-    
+function checkVictory() {
+    if (score == 100 && timer > 0) {
+        clearInterval(timer);
+        var victory = new Audio("victory.mp3");
+        victory.play();
+        document.querySelector("#board").innerHTML = "<h1>You Win!</h1>";
+    }
+}
 
+
+//where to put the check victory function? // answer // in the check match function //why //    //answer    // because the check match function is called after the second selection is made and the second selection is made after the first selection is made and the first selection is made after the first selection is made. //why // because the
+//
 
 
